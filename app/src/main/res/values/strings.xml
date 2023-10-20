@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">week5</string>
+    <string name="laki">Male</string>
+    <string name="Wanita">Female</string>
+    <string name="submit">Submit</string>
+</resources>
