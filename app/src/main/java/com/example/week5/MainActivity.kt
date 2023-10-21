@@ -115,7 +115,7 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     OutlinedTextField(
         value = texttlp,
         singleLine = true,
-        
+       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number) ,
         shape = MaterialTheme.shapes.large,
         modifier = Modifier.fillMaxWidth(),
         label = {Text(text = "Phone number")},
