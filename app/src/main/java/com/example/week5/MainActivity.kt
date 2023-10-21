@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonElevation
@@ -91,12 +92,14 @@ modifier: Modifier = Modifier
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     
     var textNama by remember { mutableStateOf("") }
     var texttlp by remember { mutableStateOf("")  }
-    
+    var address by remember { mutableStateOf("")  }
+
     val context = LocalContext.current
     val dataform: Dataform
     val uiState by cobaViewModel.uiState.collectAsState()
@@ -115,23 +118,36 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     OutlinedTextField(
         value = texttlp,
         singleLine = true,
-       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number) ,
+       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         shape = MaterialTheme.shapes.large,
         modifier = Modifier.fillMaxWidth(),
         label = {Text(text = "Phone number")},
         onValueChange = {
             texttlp = it
         })
+
+    OutlinedTextField(
+        value = address,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = {Text(text = "Address")},
+        onValueChange = {
+            address = it
+        })
     SelectJK(options = jenis.map { id -> context.resources.getString(id) },
         onSelectionChanged = {cobaViewModel.setJenisK(it)})
-    Button(modifier = Modifier.fillMaxWidth(),onClick = { cobaViewModel.insertData(textNama,texttlp, dataform.sex)}
+    Button(modifier = Modifier.fillMaxWidth(),onClick = {
+        cobaViewModel.insertData(textNama,texttlp, dataform.sex,address) }
     ) {
         Text(text = stringResource(id = R.string.submit),
             fontSize = 16.sp)
     }
     Spacer(modifier = Modifier.height(100.dp))
-    TextHasil(namanya = cobaViewModel.namalsr, telponnya = cobaViewModel.notlp, jenisnya =cobaViewModel.jenisKl )
+    TextHasil(namanya = cobaViewModel.namalsr, telponnya = cobaViewModel.notlp, jenisnya =cobaViewModel.jenisKl , addressnya = cobaViewModel.addresss)
 }
+
+
 
 
 
@@ -173,20 +189,23 @@ fun SelectJK(
 
 
 @Composable
-fun TextHasil(namanya: String, telponnya: String, jenisnya: String){
+fun TextHasil(namanya: String, telponnya: String, jenisnya: String,addressnya : String ){
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
     ),
         modifier = Modifier.fillMaxWidth()
     ){
-        Text(text = "Telepon : " + namanya,
+        Text(text = "Full name : " + namanya,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
             )
         Text(text = "Telepon : " + telponnya,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
             )
         Text(text = "Jenis : " + jenisnya,
+            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+        )
+        Text(text = "Address  : " + addressnya,
             modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
         )
 
