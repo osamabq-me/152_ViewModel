@@ -7,4 +7,9 @@ object DataSource {
         R.string.laki,
         R.string.Wanita
     )
+
+    val histatus = listOf(
+        R.string.NIKAH,
+        R.string.belum
+    )
 }

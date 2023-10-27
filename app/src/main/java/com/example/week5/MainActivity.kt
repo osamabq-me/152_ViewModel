@@ -2,33 +2,24 @@
 
 package com.example.week5
 
-import android.graphics.Paint
-import android.graphics.Paint.Align
 import android.os.Bundle
-import android.view.textclassifier.SelectionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonElevation
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
@@ -52,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.week5.Data.DataSource.histatus
 import com.example.week5.Data.DataSource.jenis
 import com.example.week5.Data.Dataform
 import com.example.week5.ui.theme.Week5Theme
@@ -99,17 +91,6 @@ modifier: Modifier = Modifier
     }
 
 }
-
-
-@Composable
-fun header(){
-    Card ( modifier = Modifier,
-        ) {
-
-    }
-}
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
@@ -124,14 +105,15 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     val uiState by cobaViewModel.uiState.collectAsState()
     dataform = uiState
 
-    top()
+
+    Top()
 
     OutlinedTextField(
         value = textNama,
         singleLine = true,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier.fillMaxWidth(),
-        label = {Text(text = "Full name")},
+        label = {Text(text = "Name")},
         onValueChange = {
             textNama = it
         })
@@ -139,10 +121,10 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     OutlinedTextField(
         value = texttlp,
         singleLine = true,
-       keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
         modifier = Modifier.fillMaxWidth(),
-        label = {Text(text = "Phone number")},
+        label = {Text(text = "phone number")},
         onValueChange = {
             texttlp = it
         })
@@ -150,7 +132,7 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     OutlinedTextField(
         value = email,
         singleLine = true,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
         modifier = Modifier.fillMaxWidth(),
         label = {Text(text = "Email")},
         onValueChange = {
@@ -158,8 +140,14 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
         })
     Card {
         Column {
+            Text(text = "Jenis", fontWeight = FontWeight.Bold)
+
             SelectJK(options = jenis.map { id -> context.resources.getString(id) },
                 onSelectionChanged = {cobaViewModel.setJenisK(it)})
+            Text(text = "Status", fontWeight = FontWeight.Bold)
+
+            Setstatus(options = histatus.map { id -> context.resources.getString(id) },
+                onSelectionChanged = {cobaViewModel.setstatus(it)} )
         }
     }
 
@@ -176,18 +164,19 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
         })
 
     Button(modifier = Modifier.fillMaxWidth(),onClick = {
-        cobaViewModel.insertData(textNama,texttlp,email, dataform.sex,address) }
+        cobaViewModel.insertData(textNama,texttlp,email, dataform.sex,address,dataform.statuse) }
     ) {
         Text(text = stringResource(id = R.string.submit),
             fontSize = 16.sp)
     }
-    Spacer(modifier = Modifier.height(100.dp))
-    TextHasil(namanya = cobaViewModel.namalsr, telponnya = cobaViewModel.notlp, jenisnya =cobaViewModel.jenisKl , addressnya = cobaViewModel.addresss, emailnya = cobaViewModel.emaill)
+    TextHasil( namanya = cobaViewModel.namalsr, telponnya = cobaViewModel.notlp,
+        jenisnya =cobaViewModel.jenisKl , addressnya = cobaViewModel.addresss,
+        emailnya = cobaViewModel.emaill, statusnya = cobaViewModel.statusus )
 }
 
 
 @Composable
-fun top(){
+fun Top(){
     Card (){
         Row{
             Image(painter = painterResource(id = R.drawable.baseline_arrow_back_24),
@@ -206,9 +195,8 @@ fun SelectJK(
     onSelectionChanged: (String) -> Unit = {}
 ){
 
-    Text(text = "Jenis", fontWeight = FontWeight.Bold)
     var selectedValue by rememberSaveable { mutableStateOf("") }
-            Row (modifier = Modifier.padding(5.dp)) {
+            Row () {
                 options.forEach { item -> run {
                     Row  (
                         modifier = Modifier.selectable(
@@ -236,33 +224,67 @@ fun SelectJK(
 
 
 }
+@Composable
+fun Setstatus(
+    options: List<String>,
+    onSelectionChanged: (String) -> Unit = {}
+){
+
+    var selectedValue by rememberSaveable { mutableStateOf("") }
+    Row () {
+        options.forEach { item -> run {
+            Row  (
+                modifier = Modifier.selectable(
+                    selected = selectedValue == item,
+                    onClick = {
+                        selectedValue = item
+                        onSelectionChanged(item)
+                    }),
+                verticalAlignment =  Alignment.CenterVertically
+            ){
+                RadioButton(selected = selectedValue == item ,
+                    onClick = {
+                        selectedValue = item
+                        onSelectionChanged(item)
+                    })
+                Text(item)
+            }
+        }
+        }
 
 
+    }
+
+
+}
 
 
 @Composable
-fun TextHasil(namanya: String, telponnya: String,emailnya: String, jenisnya: String,addressnya : String ){
+fun TextHasil(namanya: String, telponnya: String,emailnya: String, jenisnya: String,addressnya : String, statusnya : String ){
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 10.dp,
+            defaultElevation = 5.dp,
     ),
         modifier = Modifier.fillMaxWidth()
     ){
-        Text(text = "Full name : " + namanya,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-            )
-        Text(text = "Telepon : " + telponnya,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
-            )
+        Text(text = "Nama : " + namanya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
+        )
+        Text(text = "Telephone : " + telponnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
+        )
         Text(text = "Jenis : " + jenisnya,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
+        )
+        Text(text = "Status : " + statusnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
         )
         Text(text = "Email  : " + emailnya,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
         )
 
         Text(text = "Address  : " + addressnya,
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 4.dp)
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 2.dp)
         )
 
     }
