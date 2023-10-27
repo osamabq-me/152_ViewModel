@@ -3,4 +3,7 @@
     <string name="laki">Male</string>
     <string name="Wanita">Female</string>
     <string name="submit">Submit</string>
+
+    <string name="NIKAH"> NIKAH</string>
+    <string name="belum">Belum</string>
 </resources>

@@ -9,6 +9,8 @@ import android.view.textclassifier.SelectionEvent
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -89,7 +91,7 @@ modifier: Modifier = Modifier
     ) {
         Column ( verticalArrangement = Arrangement.spacedBy(18.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(28.dp)) {
+            modifier = Modifier.padding(5.dp),) {
             TempleForm()
 
         }
@@ -242,7 +244,7 @@ fun SelectJK(
 fun TextHasil(namanya: String, telponnya: String,emailnya: String, jenisnya: String,addressnya : String ){
     ElevatedCard (
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 6.dp
+            defaultElevation = 10.dp,
     ),
         modifier = Modifier.fillMaxWidth()
     ){
