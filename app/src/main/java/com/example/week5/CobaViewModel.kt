@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import com.example.week5.Data.Dataform
+import com.example.week5.Data.datastatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +26,7 @@ class CobaViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(Dataform())
     val uiState: StateFlow<Dataform> = _uiState.asStateFlow()
 
-    private val _uState = MutableStateFlow(Dataform())
+    private val _uState = MutableStateFlow(datastatus())
     val uState: StateFlow<Dataform> = _uiState.asStateFlow()
     fun insertData(nm: String, tlp: String,email: String, jk: String,ads: String){
         namalsr = nm;
@@ -40,6 +41,6 @@ class CobaViewModel : ViewModel() {
     }
 
     fun setstatus(pilihsta: String){
-        _uState.update { currentState -> currentState.copy( = }
+        _uState.update { currentState -> currentState.copy( statuse  = pilihsta) }
     }
 }
