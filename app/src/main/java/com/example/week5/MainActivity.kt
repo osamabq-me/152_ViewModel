@@ -92,6 +92,15 @@ modifier: Modifier = Modifier
 }
 
 
+@Composable
+fun header(){
+    Card ( modifier = Modifier,
+        ) {
+
+    }
+}
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
@@ -99,6 +108,7 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
     var textNama by remember { mutableStateOf("") }
     var texttlp by remember { mutableStateOf("")  }
     var address by remember { mutableStateOf("")  }
+    var email by remember { mutableStateOf("")  }
 
     val context = LocalContext.current
     val dataform: Dataform
@@ -127,6 +137,19 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
         })
 
     OutlinedTextField(
+        value = email,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = {Text(text = "Email")},
+        onValueChange = {
+            email = it
+        })
+    SelectJK(options = jenis.map { id -> context.resources.getString(id) },
+        onSelectionChanged = {cobaViewModel.setJenisK(it)})
+
+
+    OutlinedTextField(
         value = address,
         singleLine = true,
         shape = MaterialTheme.shapes.large,
@@ -135,10 +158,9 @@ fun TempleForm(cobaViewModel: CobaViewModel = viewModel()){
         onValueChange = {
             address = it
         })
-    SelectJK(options = jenis.map { id -> context.resources.getString(id) },
-        onSelectionChanged = {cobaViewModel.setJenisK(it)})
+
     Button(modifier = Modifier.fillMaxWidth(),onClick = {
-        cobaViewModel.insertData(textNama,texttlp, dataform.sex,address) }
+        cobaViewModel.insertData(textNama,texttlp,email, dataform.sex,address) }
     ) {
         Text(text = stringResource(id = R.string.submit),
             fontSize = 16.sp)

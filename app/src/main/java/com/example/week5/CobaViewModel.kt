@@ -1,5 +1,6 @@
 package com.example.week5
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -15,6 +16,8 @@ class CobaViewModel : ViewModel() {
         private set
     var notlp: String by mutableStateOf("")
         private set
+    var emaill: String by mutableStateOf("")
+        private set
     var addresss: String by mutableStateOf("")
         private set
     var jenisKl: String by mutableStateOf("")
@@ -22,9 +25,10 @@ class CobaViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(Dataform())
     val uiState: StateFlow<Dataform> = _uiState.asStateFlow()
 
-    fun insertData(nm: String, tlp: String, jk: String,ads: String){
+    fun insertData(nm: String, tlp: String,email: String, jk: String,ads: String){
         namalsr = nm;
         notlp = tlp;
+        emaill =email;
         jenisKl = jk;
         addresss = ads;
     }
@@ -32,4 +36,6 @@ class CobaViewModel : ViewModel() {
     fun setJenisK(pilihJK: String){
         _uiState.update { currentState -> currentState.copy(sex = pilihJK) }
     }
+
+
 }
